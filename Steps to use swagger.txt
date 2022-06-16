@@ -1,0 +1,203 @@
+steps to use swagger
+
+
+[6/10 9:58 AM] Rangappan, Jagdeeswaran (Cognizant)
+download swagger from git hub:
+
+https://github.com/swagger-api/swagger-editor.git extract to a folder and create a short cut to the index.html home page in desktop -----====================================== add the below dependency to the pom.xml: <dependency>
+
+    <groupId>io.springfox</groupId>
+
+    <artifactId>springfox-swagger2</artifactId>
+
+    <version>2.9.2</version>
+
+</dependency> ---------------------------
+
+application.properties:
+
+    spring.mvc.pathmatch.matching-strategy=ant-path-matcher -------------------------------- 
+
+in spring boot application file, enable Swagger: import springfox.documentation.swagger2.annotations.EnableSwagger2; @SpringBootApplication
+
+@EnableSwagger2            //this one
+
+public class SpringbootSwagger2Application{​​​​​ ----------------------------------------------- Restart the server: Go to Swagger and get the url:
+
+    http://localhost:8080/v2/api-docs     http://localhost:8080/swagger-ui/
+
+[6/10 9:59 AM] Rangappan, Jagdeeswaran (Cognizant)
+while creating project from spring initializer itself, add "feign client" dependency
+
+otherwise:
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+
+        <groupId>org.springframework.boot</groupId>
+
+        <artifactId>spring-boot-starter-parent</artifactId>
+
+        <version>2.5.2</version>
+
+        <relativePath /> <!-- lookup parent from repository -->
+
+    </parent>
+
+    <groupId>com.example</groupId>
+
+    <artifactId>food-mvc-demo</artifactId>
+
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>war</packaging>
+
+    <name>food-mvc-demo</name>
+
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+
+        <java.version>1.8</java.version>
+
+        <spring-cloud.version>2020.0.4-SNAPSHOT</spring-cloud.version>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+
+            <groupId>org.springframework.cloud</groupId>
+
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+
+        </dependency>         <dependency>
+
+            <groupId>org.springframework.boot</groupId>
+
+            <artifactId>spring-boot-starter-web</artifactId>
+
+        </dependency>         <dependency>
+
+            <groupId>org.springframework.boot</groupId>
+
+            <artifactId>spring-boot-devtools</artifactId>
+
+            <scope>runtime</scope>
+
+            <optional>true</optional>
+
+        </dependency>
+
+        <dependency>
+
+            <groupId>org.springframework.boot</groupId>
+
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+
+            <scope>provided</scope>
+
+        </dependency>
+
+        <dependency>
+
+            <groupId>org.springframework.boot</groupId>
+
+            <artifactId>spring-boot-starter-test</artifactId>
+
+            <scope>test</scope>
+
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+
+                <groupId>org.springframework.cloud</groupId>
+
+                <artifactId>spring-cloud-dependencies</artifactId>
+
+                <version>${​​​​​spring-cloud.version}​​​​​</version>
+
+                <type>pom</type>
+
+                <scope>import</scope>
+
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+
+                <groupId>org.springframework.boot</groupId>
+
+                <artifactId>spring-boot-maven-plugin</artifactId>
+
+            </plugin>
+
+        </plugins>
+
+    </build> </project> ==========================
+
+go to application.java
+
+under @SpringBootApplication annotation
+
+@EnableFeignClients 
+
+======================== package com.example.demo; import java.util.List; import org.springframework.cloud.openfeign.FeignClient;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.web.bind.annotation.PutMapping;
+
+import org.springframework.web.bind.annotation.RequestBody; import com.example.demo.model.Food; @FeignClient(value="food-api",url = "http://localhost:5000")
+
+public interface FoodRestClient {​​​​​     @GetMapping("/food")
+
+    public List<Food> getAllFoods();
+
+    @GetMapping("/food/{​​​​​id}​​​​​")
+
+    public Food findFoodById(@PathVariable("id") Long id);
+
+    @PostMapping("/food")
+
+    public Food addFood(@RequestBody Food food);
+
+    @PutMapping("/food")
+
+    public Food modifyFood(@RequestBody Food food);
+
+    @DeleteMapping("/food/{​​​​​id}​​​​​")
+
+    public void removeFood(@PathVariable("id") Long id);
+
+}​​​​​ 
+

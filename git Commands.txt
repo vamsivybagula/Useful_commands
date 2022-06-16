@@ -1,0 +1,18 @@
+Git commands
+
+push:
+
+
+create a repository in git
+Use git init to initialize the repository. 
+Use git add . in your bash to add all the files to the given folder.
+git status
+git commit -m "first commit"
+git remote add origin "http://github.com.git"
+git push -u origin master
+
+pull:
+
+go to the location 
+
+git clone "http://github.com.git"
